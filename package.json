@@ -1,0 +1,27 @@
+{
+  "name": "op_return_api",
+  "version": "1.0.0",
+  "description": "This is an experimental API to create proof-of-ownership using Bitcoin's `OP_RETURN` opcode.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lorenzolfm/op_return_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lorenzolfm/op_return_api/issues"
+  },
+  "homepage": "https://github.com/lorenzolfm/op_return_api#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
