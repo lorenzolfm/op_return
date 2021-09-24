@@ -17,10 +17,6 @@ router.post('/api', (req, res, next) => {
     }
 })
 
-const headers = {
-    "content-type": "text/plain"
-};
-
 const USER = 'user';
 const PASS = 'pass';
 let data = {
