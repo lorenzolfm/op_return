@@ -8,6 +8,7 @@ let data = {
     method: "getblockcount",
     params: []
 }
+
 const url = `http://${USER}:${PASS}@127.0.0.1:18332/`;
 
 const getBlockCount = async () => {
@@ -19,20 +20,21 @@ const getBlockCount = async () => {
     }
 }
 
-
-const createTransaction = async () => {
+const createTransaction = async (address, hexData) => {
     try {
-        data.method = "createrawtransaction"
-        data.params = [
-            [{
-                "txid": "2a406a96a393fb5d808d30aa1f954b7b8ecff4fb0053a038e6c03d36c2043de3","vout": 1
-            }],
-            {
-                "tb1ql7w62elx9ucw4pj5lgw4l028hmuw80sndtntxt": 0.000001,
-                "data": "48656c6c6f20576f726c64",
-                "tb1qkyg8p5g0k893284xuweulhvnmttu6qqgkwaajt": 0.000817
-            }
-        ]
+        data.method = "createrawtransaction";
+        data.params = [[], {[address]: 0.00001, "data": hexData}];
+        const response = await axios.post(url, data);
+        return response.data.result;
+    } catch (error) {
+        console.log(error.response.data);
+    }
+}
+
+const fundTransaction = async (unsignedTx) => {
+    try {
+        data.method = "fundrawtransaction";
+        data.params = [unsignedTx]
         const response = await axios.post(url, data);
         return response.data.result;
     } catch (error) {
@@ -62,10 +64,20 @@ const broadcastTransaction = async (signedTx) => {
     }
 }
 
-const makeTransaction = async (address, data) => {
+const convertDataToHex = (data) => {
     const size = Buffer.byteLength(data, 'utf8');
     const encodedData = new Buffer.alloc(size, data).toString('hex');
-    console.log(encodedData)
+    return encodedData
 }
 
-module.exports = { broadcastTransaction, signTransaction, createTransaction, getBlockCount, makeTransaction }
+const prepareTransaction = async (address, data) => {
+    const encodedData = convertDataToHex(data);
+    const unsignedTx = await createTransaction(address, encodedData);
+    const fundedUnsignedTx = await fundTransaction(unsignedTx);
+    const signedTx = await signTransaction(fundedUnsignedTx.hex);
+    const txId = await broadcastTransaction(signedTx.hex);
+
+    return txId;
+}
+
+module.exports = {prepareTransaction}

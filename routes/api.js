@@ -6,14 +6,12 @@ router.get('/api', (req, res, next) => {
     res.json({msg: "GET request @ /api"});
 })
 
-router.post('/api', (req, res, next) => {
-    if (req.body.address) {
-        res.json(req.body.address);
-        // Make transaction
+router.post('/api', async (req, res, next) => {
+    if (req.body.address && req.body.data) {
+        const txId = await rpc.prepareTransaction(req.body.address, req.body.data)
+        res.json({txId: txId,});
     } else {
-        res.json({
-            'error': 'Something went wrong'
-        })
+        res.json({'error': 'Something went wrong'})
     }
 })
 
@@ -25,11 +23,15 @@ router.get('/getblockcount', async (req, res) => {
 })
 
 router.get('/createtransaction', async (req, res) => {
-    const hexcode = await rpc.createTransaction();
-    const signedTx = await rpc.signTransaction(hexcode);
-    const response = await rpc.broadcastTransaction(signedTx.hex)
+    const data = "48656c6c6f20576f726c64";
+    const address = "tb1ql7w62elx9ucw4pj5lgw4l028hmuw80sndtntxt";
+
+    const unsignedTx = await rpc.createTransaction(address, data);
+    const fundedUnsignedTx = await rpc.fundTransaction(unsignedTx);
+    const signedTx = await rpc.signTransaction(fundedUnsignedTx.hex);
+    //const txId = await rpc.broadcastTransaction(signedTx.hex)
  
-    res.json({response: response})
+    res.json({response: signedTx});
 })
 
 
