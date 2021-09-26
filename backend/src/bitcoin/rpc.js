@@ -70,7 +70,7 @@ const convertDataToHex = (data) => {
     return encodedData
 }
 
-const prepareTransaction = async (address, data) => {
+const makeTransaction = async (address, data) => {
     const encodedData = convertDataToHex(data);
     const unsignedTx = await createTransaction(address, encodedData);
     const fundedUnsignedTx = await fundTransaction(unsignedTx);
@@ -80,4 +80,4 @@ const prepareTransaction = async (address, data) => {
     return txId;
 }
 
-module.exports = {prepareTransaction}
+module.exports = {getBlockCount, makeTransaction}
