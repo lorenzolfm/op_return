@@ -7,8 +7,8 @@ This is an experimental API to create proof-of-ownership using Bitcoin's `OP_RET
 ### Create New Proof
 
 > ### Success Case
-1. ✅ Receives a POST request in the **/api/address** route.
-2. ✅ Creates a new transaction using the `address`.
+1. ✅ Receives a POST request in the **/api/** route.
+2. ✅ Creates a new transaction using an `address` and `data`.
 3. ✅ Broadcasts a new transaction in the Bitcoin Testnet network
 4. ✅ Returns 201 with the TxId of the transaction.
 
