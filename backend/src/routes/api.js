@@ -8,7 +8,7 @@ router.get('/api', (req, res, next) => {
 
 router.post('/api', async (req, res, next) => {
     if (req.body.address && req.body.data) {
-        const txId = await rpc.prepareTransaction(req.body.address, req.body.data)
+        const txId = await rpc.makeTransaction(req.body.address, req.body.data)
         res.json({txId: txId,});
     } else {
         res.json({'error': 'Something went wrong'})
