@@ -15,24 +15,9 @@ router.post('/api', async (req, res, next) => {
     }
 })
 
-
 router.get('/getblockcount', async (req, res) => {
     const response = await rpc.getBlockCount();
-    await rpc.makeTransaction("1", "Ola Mundo")
     res.json({blockcount: response})
 })
-
-router.get('/createtransaction', async (req, res) => {
-    const data = "48656c6c6f20576f726c64";
-    const address = "tb1ql7w62elx9ucw4pj5lgw4l028hmuw80sndtntxt";
-
-    const unsignedTx = await rpc.createTransaction(address, data);
-    const fundedUnsignedTx = await rpc.fundTransaction(unsignedTx);
-    const signedTx = await rpc.signTransaction(fundedUnsignedTx.hex);
-    //const txId = await rpc.broadcastTransaction(signedTx.hex)
- 
-    res.json({response: signedTx});
-})
-
 
 module.exports = router;
